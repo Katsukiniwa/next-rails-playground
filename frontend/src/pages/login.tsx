@@ -24,6 +24,9 @@ export default function Login() {
       loginDispatch(actions.successLoginAction())
       localStorage.setItem('profile', JSON.stringify(result.signInUser?.user))
       router.push('/')
+      setTimeout(() => {
+        alert('ログインしました')
+      }, 1000)
     },
     onError(error) {
       alert(error.message)

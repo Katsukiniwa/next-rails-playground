@@ -1,13 +1,24 @@
 import Link from 'next/link'
-import { useContext, useState } from 'react'
+import { MouseEventHandler, useContext, useState } from 'react'
 import Image from 'next/image'
-import { AuthenticationContext } from '../../store/AuthenticationContext'
+import { AuthenticationContext, LoginContext } from '../../store/AuthenticationContext'
+import { actions } from '../../module/authentication/login'
 
 export const NavigationHeader = () => {
   const loginState = useContext(AuthenticationContext)
+  const loginDispatch = useContext(LoginContext)
   const imageSrc = 'https://mdbcdn.b-cdn.net/img/new/avatars/8.webp'
 
   const [openMenu, setOpenMenu] = useState(false)
+
+  const handleSignOut: MouseEventHandler<HTMLButtonElement> = () => {
+    setOpenMenu(false)
+    loginDispatch(actions.logOutAction())
+    localStorage.removeItem('profile')
+    setTimeout(() => {
+      alert('ログアウトしました')
+    }, 1000)
+  }
 
   return (
     <div className="flex justify-between sm: px-2 md:px-8 sm: py-2 py-1 items-center border-b-2 border-sky-200">
@@ -64,9 +75,12 @@ export const NavigationHeader = () => {
                       Settings
                     </a>
                     <div className="border-t-2 border-gray-200">
-                      <a className="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-green-100">
+                      <button
+                        onClick={handleSignOut}
+                        className="w-full flex px-4 py-2 text-sm capitalize text-gray-700 hover:bg-green-100"
+                      >
                         Sign Out
-                      </a>
+                      </button>
                     </div>
                   </div>
                 )}
